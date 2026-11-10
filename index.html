@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Apriori Basket Finder</title>
+
+  <!-- Connects the design file (colors, spacing, fonts) -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="masthead">
+    <h1>Apriori Basket Finder</h1>
+    <p>Find which grocery items are bought together. Set a minimum support count, then run.</p>
+  </header>
+
+  <main class="layout">
+
+    <!-- LEFT: the controls -->
+    <aside class="controls" aria-label="Settings">
+      <h2>Minimum support count</h2>
+      <p class="hint">An itemset is frequent when it appears in at least this many baskets.</p>
+
+      <label class="field" for="minSupportNumber">Baskets</label>
+      <input id="minSupportNumber" type="number" inputmode="numeric" step="1">
+      <p id="supportPercentLabel" class="percent-label"></p>
+
+      <label class="field" for="minSupportRange">Slide to change</label>
+      <input id="minSupportRange" type="range" step="1">
+
+      <button id="runButton" type="button">Find frequent itemsets</button>
+      <p id="errorMessage" class="error" role="alert"></p>
+
+      <h2 class="stats-title">Run statistics</h2>
+      <dl id="statsList" class="stats"></dl>
+    </aside>
+
+    <!-- RIGHT: the results -->
+    <section class="results" aria-label="Results">
+
+      <div class="panel">
+        <h2>Frequent itemsets</h2>
+        <div id="levelTabs" class="tabs" role="group" aria-label="Itemset size"></div>
+        <input id="itemsetSearch" class="search" type="search" placeholder="Search an item, like Milk" aria-label="Search itemsets">
+        <p id="itemsetNote" class="note"></p>
+        <ul id="itemsetList" class="tag-list"></ul>
+      </div>
+
+      <div class="panel">
+        <h2>What happened in each pass</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Pass</th>
+                <th scope="col">Joined</th>
+                <th scope="col">Pruned</th>
+                <th scope="col">Counted</th>
+                <th scope="col">Frequent</th>
+              </tr>
+            </thead>
+            <tbody id="passTableBody"></tbody>
+          </table>
+        </div>
+        <p class="note">Joined: candidates built. Pruned: thrown away because a smaller part was not frequent. Counted: checked against all baskets. Frequent: kept.</p>
+      </div>
+
+      <details class="panel database">
+        <summary id="databaseTitle">View the database</summary>
+        <div class="table-wrap tall">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Transaction</th>
+                <th scope="col">Size</th>
+                <th scope="col">Basket</th>
+              </tr>
+            </thead>
+            <tbody id="databaseBody"></tbody>
+          </table>
+        </div>
+      </details>
+
+    </section>
+  </main>
+
+  <!-- Connects the brain (the Apriori code). Placed last so the page above exists first. -->
+  <script src="script.js"></script>
+</body>
+</html>

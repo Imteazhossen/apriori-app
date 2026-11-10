@@ -1,0 +1,229 @@
+/* ==========================================================================
+   APRIORI BASKET FINDER - style.css
+   Look: a supermarket shelf. Each frequent itemset is a shelf label, and the
+   basket count is the yellow "price" on it.
+   ========================================================================== */
+
+/* ---- 1. Colors, written once and reused everywhere ---- */
+:root {
+  --chalk: #edf0f3;     /* page background */
+  --paper: #ffffff;     /* panels */
+  --ink: #16233b;       /* main text */
+  --muted: #5b6779;     /* small, quiet text */
+  --line: #c9d0da;      /* thin borders */
+  --price: #ffd23f;     /* the yellow price tag */
+  --leaf: #1f7a4d;      /* green for the bars */
+  --tomato: #c8321f;    /* errors */
+  --radius: 6px;
+}
+
+/* ---- 2. Basic reset so every browser starts the same ---- */
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--chalk);
+  color: var(--ink);
+  font-family: "Avenir Next", "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+  line-height: 1.5;
+  font-variant-numeric: tabular-nums; /* digits have equal width, so columns line up */
+}
+
+h1, h2 { margin: 0; line-height: 1.15; }
+
+/* ---- 3. The top banner ---- */
+.masthead {
+  background: var(--ink);
+  color: #fff;
+  padding: 28px clamp(16px, 4vw, 48px) 24px;
+  border-bottom: 6px solid var(--price);
+}
+.masthead h1 {
+  font-size: clamp(1.9rem, 4vw, 2.8rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.masthead p {
+  margin: 8px 0 0;
+  max-width: 60ch;
+  color: #c9d3e3;
+}
+
+/* ---- 4. Two columns: controls on the left, results on the right ---- */
+.layout {
+  display: grid;
+  grid-template-columns: 320px minmax(0, 1fr);
+  gap: 24px;
+  padding: 24px clamp(16px, 4vw, 48px) 48px;
+  align-items: start;
+}
+
+/* ---- 5. Left column: the controls ---- */
+.controls {
+  position: sticky;
+  top: 16px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+.controls h2 { font-size: 1.1rem; }
+.hint { margin: 6px 0 16px; color: var(--muted); font-size: 0.9rem; }
+
+.field { display: block; margin: 14px 0 6px; font-weight: 600; font-size: 0.9rem; }
+
+input[type="number"] {
+  width: 100%;
+  padding: 10px 12px;
+  font: inherit;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  border-radius: var(--radius);
+  background: #fff;
+}
+.percent-label { margin: 6px 0 0; color: var(--muted); font-size: 0.9rem; min-height: 1.4em; }
+
+input[type="range"] { width: 100%; accent-color: var(--leaf); }
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+#runButton {
+  width: 100%;
+  margin-top: 18px;
+  padding: 12px 16px;
+  font-weight: 700;
+  color: var(--ink);
+  background: var(--price);
+  border: 2px solid var(--ink);
+  border-radius: var(--radius);
+}
+#runButton:hover { background: #ffdc66; }
+#runButton:active { transform: translateY(1px); }
+
+.error { margin: 10px 0 0; color: var(--tomato); font-weight: 600; font-size: 0.9rem; min-height: 1.2em; }
+
+/* The statistics list looks like lines on a receipt (dotted separators). */
+.stats-title { margin-top: 22px; padding-top: 18px; border-top: 1px dashed var(--line); font-size: 1.1rem; }
+.stats { margin: 10px 0 0; }
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 6px 0;
+  border-bottom: 1px dotted var(--line);
+  font-size: 0.95rem;
+}
+.stat-row dt { color: var(--muted); }
+.stat-row dd { margin: 0; font-weight: 700; }
+
+/* ---- 6. Right column: panels ---- */
+.results { display: grid; gap: 24px; min-width: 0; }
+
+.panel {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 20px;
+  min-width: 0;
+}
+.panel h2 { font-size: 1.25rem; margin-bottom: 14px; }
+.note { margin: 10px 0 14px; color: var(--muted); font-size: 0.9rem; }
+
+/* Tabs: which itemset size to show */
+.tabs { display: flex; flex-wrap: wrap; gap: 8px; }
+.tab {
+  padding: 6px 12px;
+  color: var(--ink);
+  background: #fff;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  font-size: 0.9rem;
+}
+.tab:hover { background: var(--chalk); }
+.tab[aria-pressed="true"] { background: var(--ink); color: #fff; }
+
+.search {
+  display: block;
+  width: 100%;
+  max-width: 360px;
+  margin-top: 14px;
+  padding: 8px 12px;
+  font: inherit;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+/* ---- 7. The shelf labels (one per frequent itemset) ---- */
+.tag-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 12px;
+}
+.tag {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto auto;
+  gap: 8px 10px;
+  padding: 12px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-left: 5px solid var(--ink);
+  border-radius: var(--radius);
+}
+.tag-items { display: flex; flex-wrap: wrap; gap: 4px; align-content: flex-start; }
+.chip {
+  padding: 2px 8px;
+  background: var(--chalk);
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+/* The yellow "price": the number of baskets */
+.tag-count {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 64px;
+  padding: 4px 10px;
+  background: var(--price);
+  border-radius: 4px;
+  line-height: 1.2;
+}
+.tag-count strong { font-size: 1.35rem; }
+.tag-count span { font-size: 0.75rem; }
+
+/* The thin bar under each label, compared with the most common itemset */
+.bar { grid-column: 1 / -1; height: 4px; background: var(--chalk); border-radius: 2px; overflow: hidden; }
+.bar-fill { height: 100%; background: var(--leaf); transition: width 0.3s ease; }
+
+/* ---- 8. Tables ---- */
+.table-wrap { overflow-x: auto; }
+.table-wrap.tall { max-height: 420px; overflow-y: auto; margin-top: 14px; }
+
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
+th { background: var(--chalk); font-weight: 700; position: sticky; top: 0; }
+
+.database summary { cursor: pointer; font-weight: 700; font-size: 1.1rem; }
+
+/* ---- 9. Keyboard users get a clear outline ---- */
+:focus-visible { outline: 3px solid var(--leaf); outline-offset: 2px; }
+
+/* ---- 10. Small screens: stack everything in one column ---- */
+@media (max-width: 860px) {
+  .layout { grid-template-columns: 1fr; }
+  .controls { position: static; }
+}
+
+/* ---- 11. Respect people who turn animations off ---- */
+@media (prefers-reduced-motion: reduce) {
+  .bar-fill { transition: none; }
+}

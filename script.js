@@ -69,7 +69,6 @@ const DEFAULT_MIN_SUPPORT = 104;
 //  candidates and freeze the computer. This number prevents that.)
 const MAX_CANDIDATES_PER_PASS = 100000;
 
-
 /* ==========================================================================
    PART 1 : SMALL HELPER TOOLS
    Tiny functions that the rest of the code uses again and again.
